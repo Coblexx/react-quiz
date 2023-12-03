@@ -1,6 +1,10 @@
 import { useEffect, useReducer } from "react";
 import Header from "./Header";
 import Main from "./Main";
+import Loader from "./Loader";
+import Error from "./Error";
+import StartScreen from "./StartScreen";
+import Question from "./Question";
 
 const initialState = {
   questions: [],
@@ -23,14 +27,17 @@ const reducer = function (state, action) {
         status: "error",
       };
 
+    case "start":
+      return { ...state, status: "active" };
+
     default:
       throw new Error("Action unknown");
   }
 };
 
 export default function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const numQuestions = questions.length;
   // useEffect(function () {
   //   const fetchQuestions = async function () {
   //     const res = await fetch("http://localhost:7000/questions");
@@ -51,7 +58,12 @@ export default function App() {
     <div className="app">
       <Header />
       <Main>
-        <p>SOON</p>
+        {status === "loading" && <Loader />}
+        {status === "error" && <Error />}
+        {status === "ready" && (
+          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
+        )}
+        {status === "active" && <Question />}
       </Main>
     </div>
   );
