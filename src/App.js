@@ -1,7 +1,9 @@
-import "./App.css";
+import DateCounter from "./DateCounter.js";
 
-function App() {
-  return <></>;
+export default function App() {
+  return (
+    <div>
+      <DateCounter />
+    </div>
+  );
 }
-
-export default App;
